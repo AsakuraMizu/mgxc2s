@@ -452,14 +452,14 @@ public class MgxcParser
         stringBuilder.AppendLine("MUSIC\t0");
         stringBuilder.AppendLine("SEQUENCEID\t0");
         stringBuilder.AppendLine($"DIFFICULT\t{_meta.Difficulty:00}");
-        stringBuilder.AppendLine("LEVEL\t0");
+        stringBuilder.AppendLine("LEVEL\t0.0");
         stringBuilder.AppendLine($"CREATOR\t{_meta.Designer}");
-        stringBuilder.AppendLine($"BPM_DEF\t{_meta.Bpm}\t{_meta.Bpm}\t{_meta.Bpm}\t{_meta.Bpm}");
+        stringBuilder.AppendLine($"BPM_DEF\t{_meta.Bpm:F3}\t{_meta.Bpm:F3}\t{_meta.Bpm:F3}\t{_meta.Bpm:F3}");
         stringBuilder.AppendLine("MET_DEF\t4\t4");
         stringBuilder.AppendLine("RESOLUTION\t384");
         stringBuilder.AppendLine("CLK_DEF\t384");
-        stringBuilder.AppendLine("PROGJUDGE_BPM\t240.0");
-        stringBuilder.AppendLine("PROGJUDGE_AER\t1.0");
+        stringBuilder.AppendLine("PROGJUDGE_BPM\t240.000");
+        stringBuilder.AppendLine("PROGJUDGE_AER\t  0.999");
         stringBuilder.AppendLine("TUTORIAL\t0");
         stringBuilder.AppendLine("");
         foreach (Node header in _headers)

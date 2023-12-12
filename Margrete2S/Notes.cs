@@ -12,12 +12,12 @@ public abstract class Node
 
     public static string ConvertTick(int tick)
     {
-        return $"{tick / 1920}\t{(int)((float)tick % 1920f / 5f)}";
+        return $"{tick / 1920}\t{(int)Math.Round(tick % 1920 / 5f)}";
     }
 
     public static string ConvertLength(int tick)
     {
-        return $"{(int)((float)tick / 5f)}";
+        return $"{(int)Math.Round(tick / 5f)}";
     }
 }
 
@@ -38,7 +38,7 @@ public class Met : Node
 
     public override string Id => "MET";
 
-    public override string Text => $"{base.Text}\t{Denominator}\t{Numerator}";
+    public override string Text => $"{base.Text}\t{Numerator}\t{Denominator}";
 }
 
 public class Soflan : Node
@@ -49,7 +49,7 @@ public class Soflan : Node
 
     public override string Id => "SFL";
 
-    public override string Text => $"{base.Text}\t{ConvertLength(Length)}\t{Speed}";
+    public override string Text => $"{base.Text}\t{ConvertLength(Length)}\t{Speed:F6}";
 }
 
 public abstract class Note : Node
