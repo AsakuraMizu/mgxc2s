@@ -7,7 +7,8 @@ Original source code from [Margrete2S / Margrithm](https://margrithm.girlsband.p
 ## Modification from original version
 
 - Remove curved slide generating
-- Auto use ex-hold
+- Auto use ex-hold/ex-slide
+- Fix incorrect ex-hold effect
 - Fix incorrect extap merging: if a normal extap (with air or something) and a marker extap for hold/slide are in the same place, the normal extap will not be removed
 - Fix metre: in c2s, numerator should be placed in front of denominator (thanks [Chunithm-Research](https://github.com/Suprnova/Chunithm-Research/blob/main/Charting.md))
 - No `note-at-start`: time is preserved as-is and start from 0 (but you should not put a note at start)
