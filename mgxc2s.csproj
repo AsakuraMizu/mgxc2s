@@ -10,7 +10,6 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
     <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
-    <IlcDisableReflection>true</IlcDisableReflection>
     <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
     <NativeDebugSymbols>false</NativeDebugSymbols>
   </PropertyGroup>
