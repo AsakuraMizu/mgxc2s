@@ -69,8 +69,20 @@ public abstract class Note : Node
 
     public static float TransformHeight(float input)
     {
-        return (float)Math.Max((double)input * 0.625, _groundHeight);
+        return (float)Math.Max((double)input * 0.5 + 1, _groundHeight);
     }
+}
+
+public enum ExEffectType
+{
+    UP,
+    DW,
+    CE,
+    LC,
+    RC,
+    LS,
+    RS,
+    BS,
 }
 
 public interface IHoldable
@@ -82,7 +94,7 @@ public interface IExTapable
 {
     bool IsEx { get; set; }
 
-    string ExEffectType { get; set; }
+    ExEffectType ExEffectType { get; set; }
 }
 
 public enum Color
@@ -194,7 +206,7 @@ public class Damage : Note
 
 public class ExTap : Note
 {
-    public string ExEffectType { get; set; } = "UP";
+    public ExEffectType ExEffectType { get; set; } = ExEffectType.UP;
 
 
     public override string Id => "CHR";
@@ -211,7 +223,7 @@ public class Hold : Note, IHoldable, IExTapable
 {
     public bool IsEx { get; set; }
 
-    public string ExEffectType { get; set; } = "UP";
+    public ExEffectType ExEffectType { get; set; } = ExEffectType.UP;
 
     public int Length { get; set; }
 
@@ -226,7 +238,7 @@ public class Slide : Note, IHoldable, IExTapable
 
     public bool IsEx { get; set; }
 
-    public string ExEffectType { get; set; } = "UP";
+    public ExEffectType ExEffectType { get; set; } = ExEffectType.UP;
 
 
     public bool IsVisible { get; set; }

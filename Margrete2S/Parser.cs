@@ -292,7 +292,7 @@ public class MgxcParser
         _headers.Add(node);
     }
 
-    private Air.Dir ParseDir(string dir)
+    private static Air.Dir ParseDir(string dir)
     {
         return dir switch
         {
@@ -306,14 +306,31 @@ public class MgxcParser
         };
     }
 
+    private static ExEffectType ParseExEffectType(string type)
+    {
+        return type switch
+        {
+            "U" => ExEffectType.UP,
+            "D" => ExEffectType.DW,
+            "C" => ExEffectType.CE,
+            "L" => ExEffectType.LS,
+            "R" => ExEffectType.RS,
+            "RL" => ExEffectType.LC,
+            "RR" => ExEffectType.RC,
+            "IO" => ExEffectType.BS,
+            "OI" => ExEffectType.BS,
+            _ => ExEffectType.UP,
+        };
+    }
+
     private void ParseNotes(string[] tokens, int lineNumber)
     {
         if (tokens.Length != 10)
         {
             return;
         }
-        string text = tokens[0];
-        int num = text.Count((char v) => v == '.');
+        string type = tokens[0];
+        int num = type.Count((char v) => v == '.');
         NoteContext? noteContext = _currentTopContext;
         NoteContext? noteContext2 = null;
         for (int i = 0; i < num; i++)
@@ -331,79 +348,78 @@ public class MgxcParser
             noteContext = null;
             _currentTopContext = null;
         }
-        string text2 = tokens[1];
-        string dir = tokens[2];
-        string type = tokens[3];
-        int num2 = int.Parse(tokens[4]);
-        num2 /= 5;
-        num2 *= 5;
+        string seqType = tokens[1];
+        string dirOrExEffectType = tokens[2];
+        string crushType = tokens[3];
+        int tick = int.Parse(tokens[4]) / 5 * 5;
         int lane = int.Parse(tokens[5]);
         int width = int.Parse(tokens[6]);
-        int num3 = int.Parse(tokens[7]);
+        int height = int.Parse(tokens[7]);
         Color color = (Color)int.Parse(tokens[9]);
         if (!Enum.IsDefined(typeof(Color), color))
         {
             throw new InvalidCastException($"Color {color} was out of range");
         }
-        text = text.Replace(".", "");
-        Note note = text switch
+        type = type.Replace(".", "");
+        Note note = type switch
         {
             "t" => new Tap
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
                 LineNumber = lineNumber
             },
             "e" => new ExTap
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
+                ExEffectType = ParseExEffectType(dirOrExEffectType),
                 LineNumber = lineNumber
             },
             "f" => new Flick
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
                 LineNumber = lineNumber
             },
             "d" => new Damage
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
                 LineNumber = lineNumber
             },
             "h" => new Hold
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
                 LineNumber = lineNumber
             },
             "s" => new Slide
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
-                IsVisible = text2 != "LC" && text2 != "CC",
-                IsCurved = text2 == "CC",
+                IsVisible = seqType != "LC" && seqType != "CC",
+                IsCurved = seqType == "CC",
                 LineNumber = lineNumber
             },
             "a" => new Air
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
-                Direction = ParseDir(dir),
+                Direction = ParseDir(dirOrExEffectType),
                 LineNumber = lineNumber
             },
             "H" => new AirHold
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
                 EndVisible = true,
                 LineNumber = lineNumber
@@ -411,25 +427,25 @@ public class MgxcParser
             "S" => new AirSlide
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
-                Height = num3,
-                IsVisible = text2 != "LC" && text2 != "EX",
+                Height = height,
+                IsVisible = seqType != "LC" && seqType != "EX",
                 Color = color,
                 LineNumber = lineNumber
             },
             "C" => new Crush
             {
                 Lane = lane,
-                Tick = num2,
+                Tick = tick,
                 Width = width,
-                Height = num3,
-                Type = text2,
-                Type2 = type,
+                Height = height,
+                Type = seqType,
+                Type2 = crushType,
                 Color = color,
                 LineNumber = lineNumber
             },
-            _ => throw new NotImplementedException("Unknown note type " + text),
+            _ => throw new NotImplementedException("Unknown note type " + type),
         };
         NoteContext noteContext3 = new()
         {
