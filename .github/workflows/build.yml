@@ -15,8 +15,10 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore
       run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
     - name: Publish
-      run: dotnet publish --no-restore
+      run: dotnet publish --no-build
     - uses: actions/upload-artifact@v4
       with:
         name: mgxc2s
