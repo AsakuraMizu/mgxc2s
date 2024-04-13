@@ -129,12 +129,10 @@ public class MgxcParser
                 {
                     Console.WriteLine("=== Parse Error ===");
                     Console.WriteLine($"Line: {_currentLine}");
-                    Console.WriteLine("Error: " + ex.Message);
-                    Console.WriteLine("Stack: \n" + ex.StackTrace);
                     Error = ex;
                     ErrorType = "Parse Error";
                     ErrorLine = _currentLine;
-                    return;
+                    throw;
                 }
             }
         }
@@ -142,15 +140,14 @@ public class MgxcParser
         {
             DoPostProcess();
         }
-        catch (Exception ex2)
+        catch (Exception ex)
         {
             Console.WriteLine("=== Post Process Error ===");
             Console.WriteLine($"Line: {_currentLine}");
-            Console.WriteLine("Error: " + ex2.Message);
-            Console.WriteLine("Stack: \n" + ex2.StackTrace);
-            Error = ex2;
+            Error = ex;
             ErrorType = "Post Process Error";
             ErrorLine = _currentLine;
+            throw;
         }
     }
 
@@ -184,7 +181,6 @@ public class MgxcParser
             if (list.Count != 0)
             {
                 _contexts.Remove(extap);
-                Console.WriteLine($"Converted {list.Count} IExTapable");
             }
         }
         foreach (NoteContext context in _contexts)
@@ -306,6 +302,27 @@ public class MgxcParser
         };
     }
 
+    private static Color ParseColor(string color)
+    {
+        return color switch
+        {
+            "0" => Color.DEF,
+            "1" => Color.RED,
+            "2" => Color.ORN,
+            "3" => Color.YEL,
+            "4" => Color.GRN,
+            "5" => Color.CYN,
+            "6" => Color.BLU,
+            "7" => Color.PPL,
+            "8" => Color.PNK,
+            "9" => Color.VLT,
+            "10" => Color.GRY,
+            "11" => Color.BLK,
+            "35" => Color.NON,
+            _ => throw new ArgumentOutOfRangeException(nameof(color), "Color out of range"),
+        };
+    }
+
     private static ExEffectType ParseExEffectType(string type)
     {
         return type switch
@@ -355,11 +372,7 @@ public class MgxcParser
         int lane = int.Parse(tokens[5]);
         int width = int.Parse(tokens[6]);
         int height = int.Parse(tokens[7]);
-        Color color = (Color)int.Parse(tokens[9]);
-        if (!Enum.IsDefined(typeof(Color), color))
-        {
-            throw new InvalidCastException($"Color {color} was out of range");
-        }
+        Color color = ParseColor(tokens[9]);
         type = type.Replace(".", "");
         Note note = type switch
         {

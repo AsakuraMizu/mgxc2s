@@ -4,7 +4,9 @@ if (args.Length > 0)
 {
     string path = args[0];
     MgxcParser parser = new(File.ReadAllText(path), 0);
-    File.WriteAllText(Path.ChangeExtension(path, "c2s"), parser.ToString());
+    string target = Path.ChangeExtension(path, "c2s");
+    File.WriteAllText(target, parser.ToString());
+    Console.WriteLine($"Saving to {target}");
     return 0;
 }
 else

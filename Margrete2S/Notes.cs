@@ -99,19 +99,19 @@ public interface IExTapable
 
 public enum Color
 {
-    DEF = 0,
-    RED = 1,
-    ORN = 2,
-    YEL = 3,
-    GRN = 4,
-    CYN = 5,
-    BLU = 6,
-    PPL = 7,
-    PNK = 8,
-    VLT = 9,
-    GRY = 10,
-    BLK = 11,
-    NON = 35
+    DEF,
+    RED,
+    ORN,
+    YEL,
+    GRN,
+    CYN,
+    BLU,
+    PPL,
+    PNK,
+    VLT,
+    GRY,
+    BLK,
+    NON
 }
 
 public class Air : Note
