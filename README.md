@@ -14,7 +14,8 @@ Original source code from [Margrete2S / Margrithm](https://margrithm.girlsband.p
 - No `note-at-start`: time is preserved as-is and start from 0 (but you should not put a note at start)
 - Fix incorrect air height
 - Parsing extap effect (notice that margrete/umiguri has one more effect "OI (Outside to Inside)" than chunithm; this will be converted into the same effect as "IO")
-- **(Update:) Support note speed change**
+- **(Update) Support note speed change**  
+  **Notice**: Due to limitation of the game, you can not set note speed to `0` even if it works in UMIGURI. Please use something like `0.00001`
 
 ## TODO
 
