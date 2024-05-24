@@ -12,8 +12,9 @@ Original source code from [Margrete2S / Margrithm](https://margrithm.girlsband.p
 - Fix incorrect extap merging: if a normal extap (with air or something) and a marker extap for hold/slide are in the same place, the normal extap will not be removed
 - Fix metre: in c2s, numerator should be placed in front of denominator (thanks [Chunithm-Research](https://github.com/Suprnova/Chunithm-Research/blob/main/Charting.md))
 - No `note-at-start`: time is preserved as-is and start from 0 (but you should not put a note at start)
-- (Update:) Fix incorrect air height
-- (Update:) Parsing extap effect (notice that margrete/umiguri has one more effect "OI (Outside to Inside)" than chunithm; this will be converted into the same effect as "IO")
+- Fix incorrect air height
+- Parsing extap effect (notice that margrete/umiguri has one more effect "OI (Outside to Inside)" than chunithm; this will be converted into the same effect as "IO")
+- **(Update:) Support note speed change**
 
 ## TODO
 

@@ -48,6 +48,8 @@ public class MgxcParser
 
     private Soflan? _lastSoflan;
 
+    private Drop? _lastDrop;
+
     private readonly float _groundHeight;
 
     private int _currentLine;
@@ -190,12 +192,21 @@ public class MgxcParser
             _allNotes.AddRange(_notes.Where((Node v) => v is not IHoldable holdable || holdable.Length > 0));
             _notes.Clear();
         }
-        if (_lastSoflan != null)
+        if (_lastSoflan != null || _lastDrop != null)
         {
-            _currentLine = _lastSoflan.LineNumber;
             Node node = _allNotes.OrderByDescending((Node v) => v.Tick).FirstOrDefault() ?? throw new IndexOutOfRangeException("No notes?");
-            _lastSoflan.Length = node.Tick - _lastSoflan.Tick;
+            if (_lastSoflan != null)
+            {
+                _currentLine = _lastSoflan.LineNumber;
+                _lastSoflan.Length = node.Tick - _lastSoflan.Tick;
+            }
+            if (_lastDrop != null)
+            {
+                _currentLine = _lastDrop.LineNumber;
+                _lastDrop.Length = node.Tick - _lastDrop.Tick;
+            }
         }
+        _headers.RemoveAll((Node node) => node is Soflan soflan && soflan.Speed == 1 || node is Drop drop && drop.Speed == 1);
     }
 
     private void ParseMeta(string[] tokens, int lineNumber)
@@ -268,11 +279,16 @@ public class MgxcParser
                 Numerator = int.Parse(text4 ?? throw new ArgumentNullException("arg3 is reqired")),
                 LineNumber = lineNumber
             },
-            "SPDMOD" => throw new InvalidDataException("Note speed change is not supported, use scroll speed change instead"),
             "TIL" => new Soflan
             {
                 Tick = int.Parse(text3 ?? throw new ArgumentNullException("arg2 is reqired")),
                 Speed = float.Parse(text4 ?? throw new ArgumentNullException("arg3 is reqired")),
+                LineNumber = lineNumber
+            },
+            "SPDMOD" => new Drop
+            {
+                Tick = int.Parse(text2 ?? throw new ArgumentNullException("arg2 is reqired")),
+                Speed = float.Parse(text3 ?? throw new ArgumentNullException("arg3 is reqired")),
                 LineNumber = lineNumber
             },
             _ => throw new NotImplementedException("Unknown node type " + text),
@@ -284,6 +300,14 @@ public class MgxcParser
                 _lastSoflan.Length = soflan.Tick - _lastSoflan.Tick;
             }
             _lastSoflan = soflan;
+        }
+        if (node is Drop drop)
+        {
+            if (_lastDrop != null)
+            {
+                _lastDrop.Length = drop.Tick - _lastDrop.Tick;
+            }
+            _lastDrop = drop;
         }
         _headers.Add(node);
     }

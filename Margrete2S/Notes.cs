@@ -52,6 +52,17 @@ public class Soflan : Node
     public override string Text => $"{base.Text}\t{ConvertLength(Length)}\t{Speed:F6}";
 }
 
+public class Drop : Node
+{
+    public int Length { get; set; }
+
+    public float Speed { get; set; }
+
+    public override string Id => "DCM";
+
+    public override string Text => $"{base.Text}\t{ConvertLength(Length)}\t{Speed:F6}";
+}
+
 public abstract class Note : Node
 {
     private static float _groundHeight;
